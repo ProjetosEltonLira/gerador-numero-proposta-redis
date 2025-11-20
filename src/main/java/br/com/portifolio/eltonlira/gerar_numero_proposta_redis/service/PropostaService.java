@@ -23,7 +23,7 @@ public class PropostaService {
     public PropostaDTOResponse gerarId(PropostaDTORequest request) {
 
         // 1. Verifica se existe contador no Redis
-        Long value = redisTemplate.opsForValue().get(KEY_CONTADOR);
+        Object value = redisTemplate.opsForValue().get(KEY_CONTADOR);
 
         if (value == null) {
             // 2. Busca do banco

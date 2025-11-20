@@ -1,13 +1,38 @@
 services:
   redis:
-    container_name: redis
     image: redis:7.4
+    container_name: redis
     ports:
       - "6379:6379"
+    networks:
+      - hazel-network
 
-  app:
+  app1:
     build: .
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+    ports:
+      - "8080:8080"
     depends_on:
       - redis
+    networks:
+      - hazel-network
+
+  app2:
+    build: .
     environment:
-      SPRING_DATA_REDIS_HOST: redis
+      - SERVER_PORT=8081
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - hazel-network
+
+networks:
+  hazel-network:
+    driver: bridge
